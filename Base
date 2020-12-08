@@ -17,6 +17,7 @@ ClassMethod GetVec(ClassName, Example, File = "", ByRef Vec)
 	Quit Result
 }
 
+/// read a file output as stream
 ClassMethod GetInput(File) As %Stream
 {
     S fn=..#Folder_File, stream = ##class(%Stream.FileCharacter).%New()
@@ -24,16 +25,26 @@ ClassMethod GetInput(File) As %Stream
     return stream
 }
 
-/// get file based on classname, stack, example
+/// get file based on classname, example
 ClassMethod GetFileName(ClassName, Example = 0)
 {
 	S File=$P(ClassName,".",*)_$S(Example:"-example",1:"")_".txt"
 	Quit File
 }
 
+/// check if we are at last line of Vec
 ClassMethod LastLn(ByRef Vec, CurrentLine) [ CodeMode = expression ]
 {
 '$D(Vec(CurrentLine+1))
+}
+
+/// convert a vec(ln) to grip(x,y)
+/// pos 1,1 = 1st line, left pos
+ClassMethod VecToGrid(ByRef Vec, ByRef Grid)
+{
+	F Line=1:1:Vec {
+		S rc=Vec(Line) F Row=1:1:$L(rc) S t=$E(rc,Row), Grid(Line,Row)=t
+		}
 }
 
 }
